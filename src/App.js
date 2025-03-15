@@ -28,7 +28,7 @@ function App() {
   const fetchHighScores = async () => {
     try {
       setHighScoresLoading(true);
-      const response = await fetch("/.netlify/functions/highscores");
+      const response = await fetch("/netlify/functions/highscores/highscores");
       const data = await response.json();
 
       if (data.highScores) {
