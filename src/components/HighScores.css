@@ -1,0 +1,49 @@
+.high-scores {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.high-scores h2 {
+  text-align: center;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.high-scores table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.high-scores th,
+.high-scores td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.high-scores th {
+  background-color: #f0f0f0;
+  font-weight: 600;
+}
+
+.high-scores tr:nth-child(even) {
+  background-color: #f5f5f5;
+}
+
+.high-scores tr:hover {
+  background-color: #e9e9e9;
+}
+
+.high-scores-loading,
+.high-scores-error {
+  text-align: center;
+  padding: 1rem;
+  color: #666;
+}
+
+.high-scores-error {
+  color: #d32f2f;
+}

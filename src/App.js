@@ -3,6 +3,7 @@ import "./App.css";
 import Header from "./components/Header";
 import Question from "./components/Question";
 import Results from "./components/Results";
+import HighScores from "./components/HighScores";
 import questionsData from "./questionsData";
 
 function App() {
@@ -20,6 +21,33 @@ function App() {
   const [submitted, setSubmitted] = useState(() => {
     return localStorage.getItem("worksheet-submitted") === "true";
   });
+  const [showHighScores, setShowHighScores] = useState(false);
+  const [highScores, setHighScores] = useState([]);
+  const [highScoresLoading, setHighScoresLoading] = useState(false);
+
+  // Function to fetch high scores
+  const fetchHighScores = async () => {
+    try {
+      setHighScoresLoading(true);
+      const response = await fetch("/.netlify/functions/highscores");
+      const data = await response.json();
+
+      if (data.highScores) {
+        setHighScores(data.highScores);
+      }
+    } catch (err) {
+      console.error("Error fetching high scores:", err);
+    } finally {
+      setHighScoresLoading(false);
+    }
+  };
+
+  // Fetch high scores when component mounts or showHighScores changes
+  useEffect(() => {
+    if (showHighScores) {
+      fetchHighScores();
+    }
+  }, [showHighScores]);
 
   // Save to localStorage whenever these values change
   useEffect(() => {
@@ -66,6 +94,7 @@ function App() {
     setAnswers({});
     setScore(null);
     setSubmitted(false);
+    setShowHighScores(false);
 
     // Clear localStorage items
     localStorage.removeItem("worksheet-answers");
@@ -82,17 +111,63 @@ function App() {
     }));
   };
 
+  // Toggle high scores display
+  const toggleHighScores = () => {
+    setShowHighScores((prev) => !prev);
+  };
+
   return (
     <div className="app">
       <div className="worksheet">
         <Header name={name} setName={setName} score={score} />
 
         {submitted ? (
-          <Results
-            score={score}
-            totalQuestions={questionsData.length}
-            onReset={resetWorksheet}
-          />
+          <>
+            <Results
+              score={score}
+              totalQuestions={questionsData.length}
+              onReset={resetWorksheet}
+              name={name}
+              onScoreSaved={fetchHighScores}
+            />
+            <button
+              className="toggle-highscores-button"
+              onClick={toggleHighScores}
+            >
+              {showHighScores ? "Hide High Scores" : "Show High Scores"}
+            </button>
+            {showHighScores && (
+              <div className="high-scores">
+                <h2>High Scores</h2>
+                {highScoresLoading ? (
+                  <div className="high-scores-loading">
+                    Loading high scores...
+                  </div>
+                ) : highScores.length === 0 ? (
+                  <p>No high scores yet. Be the first!</p>
+                ) : (
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Rank</th>
+                        <th>Name</th>
+                        <th>Score</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {highScores.map((score, index) => (
+                        <tr key={index}>
+                          <td>{index + 1}</td>
+                          <td>{score.name}</td>
+                          <td>{score.score}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                )}
+              </div>
+            )}
+          </>
         ) : (
           <>
             <div className="questions-container">

@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Results.css";
 
-function Results({ score, totalQuestions, onReset }) {
+function Results({ score, totalQuestions, onReset, name, onScoreSaved }) {
+  const [isSaving, setIsSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const [error, setError] = useState(null);
+
   const percentage = (score / totalQuestions) * 100;
 
   let message = "";
@@ -15,6 +19,39 @@ function Results({ score, totalQuestions, onReset }) {
     message = "Keep practicing!";
   }
 
+  const saveHighScore = async () => {
+    try {
+      setIsSaving(true);
+      setError(null);
+
+      const response = await fetch("/.netlify/functions/highscores", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name, score }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to save score");
+      }
+
+      // Call the callback to fetch updated high scores
+      if (onScoreSaved) {
+        onScoreSaved();
+      }
+
+      setSaved(true);
+    } catch (err) {
+      console.error("Error saving high score:", err);
+      setError(err.message || "Failed to save your score");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   return (
     <div className="results">
       <h2>Your Results</h2>
@@ -23,6 +60,23 @@ function Results({ score, totalQuestions, onReset }) {
         <span className="total">/{totalQuestions}</span>
       </div>
       <p className="result-message">{message}</p>
+
+      {!saved && !error && (
+        <button
+          className="save-score-button"
+          onClick={saveHighScore}
+          disabled={isSaving}
+        >
+          {isSaving ? "Saving..." : "Save to High Scores"}
+        </button>
+      )}
+
+      {saved && (
+        <div className="success-message">Your score has been saved!</div>
+      )}
+
+      {error && <div className="error-message">{error}</div>}
+
       <button className="try-again-button" onClick={onReset}>
         Try Again
       </button>
