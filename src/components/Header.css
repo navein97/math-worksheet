@@ -1,0 +1,41 @@
+.header {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #eee;
+}
+
+.header h1 {
+  margin-bottom: 1rem;
+  color: #4a4a4a;
+}
+
+.student-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.name-input {
+  display: flex;
+  align-items: center;
+}
+
+.name-input label {
+  margin-right: 0.5rem;
+  font-weight: 500;
+}
+
+.name-input input {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.score-display {
+  font-weight: 700;
+  font-size: 1.1rem;
+}
