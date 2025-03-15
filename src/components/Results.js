@@ -24,7 +24,7 @@ function Results({ score, totalQuestions, onReset, name, onScoreSaved }) {
       setIsSaving(true);
       setError(null);
 
-      const response = await fetch("/netlify/functions/highscores/highscores", {
+      const response = await fetch("/.netlify/functions/highscores", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -11,9 +11,7 @@ function HighScores() {
     const fetchHighScores = async () => {
       try {
         setLoading(true);
-        const response = await fetch(
-          "/netlify/functions/highscores/highscores"
-        );
+        const response = await fetch("/.netlify/functions/highscores");
         const data = await response.json();
 
         if (data.highScores) {
