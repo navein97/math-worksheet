@@ -32,18 +32,31 @@ function Results({ score, totalQuestions, onReset, name, onScoreSaved }) {
         body: JSON.stringify({ name, score }),
       });
 
-      const data = await response.json();
+      let data;
+      try {
+        data = await response.json();
+      } catch (jsonError) {
+        console.error("Error parsing JSON:", jsonError);
+        // Still mark as saved if status is OK, even if JSON parsing failed
+        if (response.ok) {
+          setSaved(true);
+          if (onScoreSaved) onScoreSaved();
+          return;
+        } else {
+          throw new Error("Server returned an error");
+        }
+      }
 
       if (!response.ok) {
         throw new Error(data.error || "Failed to save score");
       }
 
+      setSaved(true);
+
       // Call the callback to fetch updated high scores
       if (onScoreSaved) {
         onScoreSaved();
       }
-
-      setSaved(true);
     } catch (err) {
       console.error("Error saving high score:", err);
       setError(err.message || "Failed to save your score");
