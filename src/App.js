@@ -4,7 +4,7 @@ import Header from "./components/Header";
 import Question from "./components/Question";
 import Results from "./components/Results";
 import questionsData from "./questionsData";
-
+import HighScores from "./components/HighScores";
 function App() {
   // Initialize state from localStorage if available
   const [name, setName] = useState(() => {
@@ -135,37 +135,7 @@ function App() {
             >
               {showHighScores ? "Hide High Scores" : "Show High Scores"}
             </button>
-            {showHighScores && (
-              <div className="high-scores">
-                <h2>High Scores</h2>
-                {highScoresLoading ? (
-                  <div className="high-scores-loading">
-                    Loading high scores...
-                  </div>
-                ) : highScores.length === 0 ? (
-                  <p>No high scores yet. Be the first!</p>
-                ) : (
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>Rank</th>
-                        <th>Name</th>
-                        <th>Score</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {highScores.map((score, index) => (
-                        <tr key={index}>
-                          <td>{index + 1}</td>
-                          <td>{score.name}</td>
-                          <td>{score.score}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                )}
-              </div>
-            )}
+            {showHighScores && <HighScores />}
           </>
         ) : (
           <>
