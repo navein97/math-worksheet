@@ -3,7 +3,6 @@ import "./App.css";
 import Header from "./components/Header";
 import Question from "./components/Question";
 import Results from "./components/Results";
-import HighScores from "./components/HighScores";
 import questionsData from "./questionsData";
 
 function App() {
