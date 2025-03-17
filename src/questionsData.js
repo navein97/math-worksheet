@@ -47,7 +47,7 @@ const questionsData = [
       { id: "b", value: 70 },
       { id: "c", value: 60 },
     ],
-    correctAnswer: "b",
+    correctAnswer: "c",
   },
   {
     id: 6,
